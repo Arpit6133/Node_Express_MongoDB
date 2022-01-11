@@ -7,6 +7,9 @@ import { LEADERS } from '../shared/leaders';
   providedIn: 'root'
 })
 export class LeaderService {
+  getFeaturedLeader(): Leader {
+    throw new Error('Method not implemented.');
+  }
 
   constructor() { }
 
