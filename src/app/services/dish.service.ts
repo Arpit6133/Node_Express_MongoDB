@@ -6,6 +6,9 @@ import { DISHES } from '../shared/dishes';
   providedIn: 'root'
 })
 export class DishService {
+  getdish(id: any): typeof Dish {
+    throw new Error("Method not implemented.");
+  }
   
 
   constructor() { }

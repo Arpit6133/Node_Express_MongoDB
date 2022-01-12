@@ -7,14 +7,15 @@ import { LEADERS } from '../shared/leaders';
   providedIn: 'root'
 })
 export class LeaderService {
-  getFeaturedLeader(): Leader {
-    throw new Error('Method not implemented.');
-  }
+  
 
   constructor() { }
 
-  getLeader(): Leader[] {
+  getLeaders(): Leader[] {
     return LEADERS;
+  }
+  getFeaturedLeader(): Leader {
+    return LEADERS.filter((leader) => leader.featured)[0];
   }
 
 }

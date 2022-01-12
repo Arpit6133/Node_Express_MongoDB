@@ -16,6 +16,8 @@ import { Location } from '@angular/common';
       
     
     dish = Dish;
+
+
     
     
     constructor(private dishService: DishService,
@@ -24,7 +26,7 @@ import { Location } from '@angular/common';
 
     ngOnInit() {
       let id = this.route.snapshot.params['id'];
-      this.dish = this.dishService.getDish(id);
+      this.dish = this.dishService.getdish(id);
     }
 
     
