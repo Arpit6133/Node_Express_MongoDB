@@ -32,9 +32,14 @@
         <h4 matLine>{{ comment.comment }}</h4>
         <p matLine>{{comment.rating}} Stars</p>
         <p matLine>
-          <span> -- {{ comment.author}} -- {{ comment.date | date }}</span>
+          <span> -- {{ comment.author}} {{ comment.date | date }}</span>
         </p>
       </mat-list-item>
     </mat-list>
   </div>
+
+  <div fxFlex [hidden]="dish">
+    <mat-spinner></mat-spinner> <h4>Loading . . . Please wait</h4>
+  </div>
+  
 </div>
