@@ -60,6 +60,7 @@
             {{ formErrors.author }}
           </mat-error>
         </mat-form-field>
+        <mat-slider min="1" max="5" step="1" thumbLable tickInterval="1"></mat-slider>
         <mat-form-field class="half-width">
           <input matInput formControlName="comment" placeholder="Comment" type="text" required>
           <mat-error *ngIf="formErrors.comment">
@@ -67,18 +68,16 @@
           </mat-error>
         </mat-form-field>
       </p>
-      <p>Rating</p>
-      <mat-slider thumbLable [displayWith]="formatLable" id = "rating" tickInterval="1" step="1" min="1" max="5"></mat-slider>
       <button type = "submit" mat-button class="background-primary text-floral-white"
       [disabled]="commentForm.invalid">Submit</button>
     </form>
   </div>
 
-
-  <div fxFlex [hidden]="dish">
+  <div fxFlex [hidden]="dish || errMess">
     <mat-spinner></mat-spinner> <h4>Loading . . . Please wait</h4>
   </div>
-
-  
-  
+  <div fxFlex *ngIf="errMess">
+    <h2>Error</h2>
+    <h4>{{errMess}}</h4>
+  </div>
 </div>
