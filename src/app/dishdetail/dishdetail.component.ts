@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Inject }from "@angular/core";
 import { Dish } from "../shared/dish";
 import { DishService } from '../services/dish.service';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { Comment } from "../shared/comment";
+import { Comment, rating } from "../shared/comment";
 import { MatSliderModule } from '@angular/material/slider';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -26,7 +26,8 @@ import { switchMap } from "rxjs/operators";
     next : string;
     commentForm: FormGroup;
     comment: Comment;
-    @ViewChild('fform') commentFormDirective;
+    @ViewChild('cform') commentFormDirective;
+    dishcopy: Dish;
 
     formErrors = {
       'author': '',
@@ -56,15 +57,27 @@ import { switchMap } from "rxjs/operators";
         .subscribe((dishIds) => this.dishIds = dishIds);
       this.route.params
         .pipe(switchMap((params:Params) => this.dishService.getDish(params['id'])))
-        .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id) },
+        .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id) },
           errmess => this.errMess = <any> errmess);
+    }
+
+    
+
+    setPrevNext(dishId: string) {
+      const index = this .dishIds.indexOf(dishId);
+      this.prev = this.dishIds[(this.dishIds.length + index - 1) % this.dishIds.length];
+      this.next = this.dishIds[(this.dishIds.length + index + 1) % this.dishIds.length];
+    }
+
+    goBack(): void {
+      this.location.back();
     }
 
     createForm(): void{
       this.commentForm = this.fb.group({
-        author:['',[Validators.required , Validators.minLength(4) , Validators.maxLength(25)]],
-        rating:[0,[Validators.required , Validators.pattern]],
-        comment:['',[Validators.required,Validators.minLength(4) , Validators.maxLength(50)]]
+        author:['',[Validators.required , Validators.minLength(4)]],
+        rating:5,
+        comment:['',Validators.required]
       });
 
       this.commentForm.valueChanges
@@ -96,35 +109,23 @@ import { switchMap } from "rxjs/operators";
 
     onSubmit() {
       this.comment = this.commentForm.value;
+      this.comment.date = new Date().toISOString();
       console.log(this.comment);
+      this.dishcopy.comments.push(this.comment);
+      this.dishService.putDish(this.dishcopy)
+        .subscribe(dish => {
+          this.dish = dish; this.dishcopy= dish;
+        },
+        errmess => {this.dish = null; this.dishcopy= null; this.errMess = <any>errmess ;});
+      this.commentFormDirective.resetForm();
       this.commentForm.reset({
         author: '',
-        comment: '',
-        
+        rating: 5,
+        comment: ''
       });
-      this.commentFormDirective.resetForm();
+      
     }
 
-    setPrevNext(dishId: string) {
-      const index = this .dishIds.indexOf(dishId);
-      this.prev = this.dishIds[(this.dishIds.length + index - 1) % this.dishIds.length];
-      this.next = this.dishIds[(this.dishIds.length + index + 1) % this.dishIds.length];
-
-    }
-
-    formatLable(value: number) {
-      if (!value) {
-        return 0;
-      }
-      if (value <= 5) {
-        return value;
-      }
-    }
-
-    
-    goBack(): void {
-      this.location.back();
-  }
   }
   
 
