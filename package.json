@@ -12,5 +12,8 @@
   "dependencies": {
     "assert": "^1.4.1",
     "mongodb": "^3.0.10"
+  },
+  "devDependencies": {
+  "@types/mongodb": "^4.0.7"
   }
 }
