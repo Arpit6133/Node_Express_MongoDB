@@ -1,7 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Feedback , ContactType } from '../shared/feedback';
 import { flyInOut } from '../animations/app.animation';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { Location } from '@angular/common';
+
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -20,6 +25,7 @@ export class ContactComponent implements OnInit {
   feedback: Feedback;
   contactType = ContactType;
   @ViewChild('fform') feedbackFormDirective;
+  errMess: string;
 
   formErrors = {
     'firstname':'',
@@ -51,11 +57,16 @@ export class ContactComponent implements OnInit {
 
   };
   
-  constructor(private fb: FormBuilder) {
-    this.createForm();
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private location: Location,
+    @Inject('BaseURL') private BaseURL) {
+    
   }
 
   ngOnInit() {
+    this.createForm();
   }
 
   createForm(): void {
